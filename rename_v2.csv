@@ -1,0 +1,78 @@
+﻿Original,Rename
+type.of.ssriEscitalopram,ssri.ESC
+type.of.ssriFluovoxamine,ssri.FLV
+type.of.ssriFluoxetine,ssri.FLX
+type.of.ssriFluvoxamine,ssri.FLV
+type.of.ssriParoxetine,ssri.PAR
+type.of.ssriSertraline,ssri.SER
+type.of.ssriSetraline,ssri.SER
+frequencyAcute [1 day],freq.acute
+"frequencyChronic [daily, ~150x]",freq.chronic
+"frequencyChronic [daily, 10x]",freq.chronic
+"frequencyChronic [daily, 12x]",freq.chronic
+"frequencyChronic [daily, 13x]",freq.chronic
+"frequencyChronic [daily, 14x]",freq.chronic
+"frequencyChronic [daily, 15x]",freq.chronic
+"frequencyChronic [daily, 16x]",freq.chronic
+"frequencyChronic [daily, 18x]",freq.chronic
+"frequencyChronic [daily, 19x]",freq.chronic
+"frequencyChronic [daily, 20x]",freq.chronic
+"frequencyChronic [daily, 21x]",freq.chronic
+"frequencyChronic [daily, 22x]",freq.chronic
+"frequencyChronic [daily, 23x]",freq.chronic
+"frequencyChronic [daily, 24x]",freq.chronic
+"frequencyChronic [daily, 25x]",freq.chronic
+"frequencyChronic [daily, 26x]",freq.chronic
+"frequencyChronic [daily, 28x]",freq.chronic
+"frequencyChronic [daily, 29x]",freq.chronic
+"frequencyChronic [daily, 30x]",freq.chronic
+"frequencyChronic [daily, 31x]",freq.chronic
+"frequencyChronic [daily, 33x]",freq.chronic
+"frequencyChronic [daily, 44x]",freq.chronic
+"frequencyChronic [daily, 7x]",freq.chronic
+"frequencyChronic [daily, 8x]",freq.chronic
+"frequencyChronic [daily, 9x]",freq.chronic
+"frequencyChronic [daily, minimally 14x]",freq.chronic
+"frequencyChronic [daily, NR]",freq.chronic
+"frequencyChronic[daily, 11x]",freq.chronic
+frequencySubchronic [3x in 24 h],freq.sub
+"frequencySubchronic [daily, 2x]",freq.sub
+"frequencySubchronic [daily, 3x]",freq.sub
+"frequencySubchronic [daily, 4x]",freq.sub
+"frequencySubchronic [daily, 5x]",freq.sub
+"frequencySubchronic [daily, 6x]",freq.sub
+disease.inductionAcute uncontrollable stress,dis.ind.STRESS
+disease.inductionChronic social defeat,dis.ind.STRESS
+disease.inductionChronic unpredictable stress,dis.ind.STRESS
+disease.inductionHigh fear,dis.ind.highfear
+disease.inductionImmobilization stressed,dis.ind.STRESS
+disease.inductionLow fear,dis.ind.lowfear
+disease.inductionMaternal separation,dis.ind.STRESS
+disease.inductionMeCP2-308,dis.ind.GMO
+disease.inductionNone,dis.ind.none
+disease.inductionOlfactory bulbectomized,dis.ind.OB
+disease.inductionPdcd2-/-,dis.ind.GMO
+disease.inductionRestraint,dis.ind.STRESS
+disease.inductionSingle prolonged stress,dis.ind.STRESS
+disease.inductionTime-dependent sensitization,dis.ind.STRESS
+disease.inductionTime dependent sensitization,dis.ind.STRESS
+disease.inductionVariable stress,dis.ind.STRESS
+disease.inductionVGV 5-HT2CR,dis.ind.GMO
+disease.inductionWIRS,dis.ind.STRESS
+disease.inductionZfpm1CKO,dis.ind.GMO
+speciesHuman,species.human
+speciesMouse,species.mouse
+speciesRabbit,species.rabbit
+speciesRat,species.rat
+speciesZebrafish,species.zebrafish
+type.of.testAvoidance conditioning,test.AC
+type.of.testCODA,test.CODA
+type.of.testConditioned emotional response,test.CER
+type.of.testConditioned freezing,test.CF
+type.of.testConditioned place aversion,test.CPA
+type.of.testFear potentiated startle,test.FPS
+type.of.testInhibitory avoidance,test.IA
+type.of.testPassive avoidance,test.PA
+type.of.testPlus-maze discriminative avoidance task,test.PMDAT
+type.of.testStep through avoidance,test.STA
+type.of.testTwo-way active avoidance,test.TWAA

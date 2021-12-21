@@ -8,61 +8,61 @@ type.of.ssriParoxetine,ssri.PAR
 type.of.ssriSertraline,ssri.SER
 type.of.ssriSetraline,ssri.SER
 frequencyAcute,freq.acute
-frequencyAcute [1 day],freq.acute1
-"frequencyChronic [daily, ~150x]",freq.chronic150x
-"frequencyChronic [daily, 10x]",freq.chronic10x
-"frequencyChronic [daily, 12x]",freq.chronic12x
-"frequencyChronic [daily, 13x]",freq.chronic13x
-"frequencyChronic [daily, 14x]",freq.chronic14x
-"frequencyChronic [daily, 15x]",freq.chronic15x
-"frequencyChronic [daily, 16x]",freq.chronic16x
-"frequencyChronic [daily, 18x]",freq.chronic18x
-"frequencyChronic [daily, 19x]",freq.chronic19x
-"frequencyChronic [daily, 20x]",freq.chronic20x
-"frequencyChronic [daily, 21x]",freq.chronic21x
-"frequencyChronic [daily, 22x]",freq.chronic22x
-"frequencyChronic [daily, 23x]",freq.chronic23x
-"frequencyChronic [daily, 24x]",freq.chronic24x
-"frequencyChronic [daily, 25x]",freq.chronic25x
-"frequencyChronic [daily, 26x]",freq.chronic26x
-"frequencyChronic [daily, 28x]",freq.chronic28x
-"frequencyChronic [daily, 29x]",freq.chronic29x
-"frequencyChronic [daily, 30x]",freq.chronic30x
-"frequencyChronic [daily, 31x]",freq.chronic31x
-"frequencyChronic [daily, 33x]",freq.chronic33x
-"frequencyChronic [daily, 44x]",freq.chronic44x
-"frequencyChronic [daily, 7x]",freq.chronic7x
-"frequencyChronic [daily, 8x]",freq.chronic8x
-"frequencyChronic [daily, 9x]",freq.chronic9x
-"frequencyChronic [daily, minimally 14x]",freq.chronic14x
-"frequencyChronic [daily, NR]",freq.chronicNR
-"frequencyChronic[daily, 11x]",freq.chronic11x
-frequencySubchronic [3x in 24 h],freq.sub3x24h
-"frequencySubchronic [daily, 2x]",freq.sub2x
-"frequencySubchronic [daily, 3x]",freq.sub3x
-"frequencySubchronic [daily, 4x]",freq.sub4x
-"frequencySubchronic [daily, 5x]",freq.sub5x
-"frequencySubchronic [daily, 6x]",freq.sub6x
-disease.induction3xTgAD,disease.TTG
-disease.inductionAcute uncontrollable stress,disease.AUS
-disease.inductionChronic social defeat,disease.CSD
-disease.inductionChronic unpredictable stress,disease.CUS
-disease.inductionHigh fear,disease.highfear
-disease.inductionImmobilization stressed,disease.IS
-disease.inductionLow fear,disease.lowfear
-disease.inductionMaternal separation,disease.MS
-disease.inductionMeCP2-308,disease.MeCP2-308
-disease.inductionNone,disease.none
-disease.inductionOlfactory bulbectomized,disease.OB
-disease.inductionPdcd2-/-,disease.Pdcd2
-disease.inductionRestraint,disease.restraint
-disease.inductionSingle prolonged stress,disease.SPS
-disease.inductionTime-dependent sensitization,disease.TDS
-disease.inductionTime dependent sensitization,disease.TDS
-disease.inductionVariable stress,disease.VS
-disease.inductionVGV 5-HT2CR,disease.VGV5HT2CR
-disease.inductionWIRS,disease.WIRS
-disease.inductionZfpm1CKO,disease.Zfpm1CKO
+frequencyAcute [1 day],freq.acute
+"frequencyChronic [daily, ~150x]",freq.chronic
+"frequencyChronic [daily, 10x]",freq.chronic
+"frequencyChronic [daily, 12x]",freq.chronic
+"frequencyChronic [daily, 13x]",freq.chronic
+"frequencyChronic [daily, 14x]",freq.chronic
+"frequencyChronic [daily, 15x]",freq.chronic
+"frequencyChronic [daily, 16x]",freq.chronic
+"frequencyChronic [daily, 18x]",freq.chronic
+"frequencyChronic [daily, 19x]",freq.chronic
+"frequencyChronic [daily, 20x]",freq.chronic
+"frequencyChronic [daily, 21x]",freq.chronic
+"frequencyChronic [daily, 22x]",freq.chronic
+"frequencyChronic [daily, 23x]",freq.chronic
+"frequencyChronic [daily, 24x]",freq.chronic
+"frequencyChronic [daily, 25x]",freq.chronic
+"frequencyChronic [daily, 26x]",freq.chronic
+"frequencyChronic [daily, 28x]",freq.chronic
+"frequencyChronic [daily, 29x]",freq.chronic
+"frequencyChronic [daily, 30x]",freq.chronic
+"frequencyChronic [daily, 31x]",freq.chronic
+"frequencyChronic [daily, 33x]",freq.chronic
+"frequencyChronic [daily, 44x]",freq.chronic
+"frequencyChronic [daily, 7x]",freq.chronic
+"frequencyChronic [daily, 8x]",freq.chronic
+"frequencyChronic [daily, 9x]",freq.chronic
+"frequencyChronic [daily, minimally 14x]",freq.chronic
+"frequencyChronic [daily, NR]",freq.chronic
+"frequencyChronic[daily, 11x]",freq.chronic
+frequencySubchronic [3x in 24 h],freq.sub
+"frequencySubchronic [daily, 2x]",freq.sub
+"frequencySubchronic [daily, 3x]",freq.sub
+"frequencySubchronic [daily, 4x]",freq.sub
+"frequencySubchronic [daily, 5x]",freq.sub
+"frequencySubchronic [daily, 6x]",freq.sub
+disease.induction3xTgAD,disease.GMO
+disease.inductionAcute uncontrollable stress,dis.ind.STRESS
+disease.inductionChronic social defeat,dis.ind.STRESS
+disease.inductionChronic unpredictable stress,dis.ind.STRESS
+disease.inductionHigh fear,dis.ind.highfear
+disease.inductionImmobilization stressed,dis.ind.STRESS
+disease.inductionLow fear,dis.ind.lowfear
+disease.inductionMaternal separation,dis.ind.STRESS
+disease.inductionMeCP2-308,dis.ind.GMO
+disease.inductionNone,dis.ind.none
+disease.inductionOlfactory bulbectomized,dis.ind.OB
+disease.inductionPdcd2-/-,dis.ind.GMO
+disease.inductionRestraint,dis.ind.STRESS
+disease.inductionSingle prolonged stress,dis.ind.STRESS
+disease.inductionTime-dependent sensitization,dis.ind.STRESS
+disease.inductionTime dependent sensitization,dis.ind.STRESS
+disease.inductionVariable stress,dis.ind.STRESS
+disease.inductionVGV 5-HT2CR,dis.ind.GMO
+disease.inductionWIRS,dis.ind.STRESS
+disease.inductionZfpm1CKO,dis.ind.GMO
 speciesCommon goldfish,species.goldfish
 speciesHuman,species.human
 speciesMouse,species.mouse
