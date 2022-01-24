@@ -259,7 +259,7 @@ If a dummy variable has a significant effect, that means that that group's mean 
 library(metacart)
 modres <- lapply(processes, function(p){
   df <- dat[dat$Process == p, ]
-  modmat <- model.matrix(~., df[mods])[,-1]
+  modmat <- model.matrix(~-1+., df[mods])[,-1]
   constcols <- colSums(modmat) == 0 | colSums(modmat) == nrow(modmat)
   constcolnames <- colnames(modmat)[constcols]
   modmat <- modmat[, !constcols]
