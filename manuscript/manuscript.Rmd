@@ -114,7 +114,7 @@ tab <- data.frame(Parameter = c(rownames(mod$b), "Tau2"),
 
 #Write forest plot to file
 xname <- paste0("Hedges' g (", p, ")")
-tmp <- df[order(df$vi, decreasing = TRUE), ]
+tmp <- df[order(df$article.code, decreasing = FALSE), ]
 df_es <- data.frame(
     Study = ordered(tmp$article.code, levels = unique(tmp$article.code)),
     y = 1:nrow(tmp),
