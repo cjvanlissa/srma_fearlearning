@@ -5,7 +5,7 @@ p <- processes[{{i}}]
     datatable(
           tb,
           rownames = FALSE,
-          caption = paste0("Reference category for each variable for process ", p))
+          caption = paste0("Category not compared to the grand mean for each variable for process ", p))
 ```
 
 ```{r tabrma{{i}}, results = 'asis'}

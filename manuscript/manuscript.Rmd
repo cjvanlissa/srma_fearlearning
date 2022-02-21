@@ -8,7 +8,7 @@ knit: worcs::cite_all
 ---
 
 ```{r setup, include=FALSE}
-run_everything = TRUE
+run_everything = FALSE
 library("worcs")
 library(ggplot2)
 library(kableExtra)
@@ -248,24 +248,40 @@ A credible interval is interpreted as follows: The population value falls within
 This is different from the interpretation of frequentist confidence intervals, which are interpreted as follows: In the long run, 95% of confidence intervals contain the population value.
 
 To examine the effect of a categorical variable,
-a reference category must be chosen.
-Dummy variables encode the difference between each remaining category and this reference category.
+we used deviation coding.
+This means that the intercept represents the grand mean accross all categories of the categorical variables.
+Dummy variables encode the difference between each category and this grand mean.
+To ensure model identification, one category is not compared to the grand mean.
+This was always the smallest category in the analyses below.
+
 When examining the results,
-the intercept represents the expected effect size for a study that falls within the reference category for all categorical variables.
-The effect of dummy variables represents the difference of that category with the reference category.
-If a dummy variable has a significant effect, that means that that group's mean differs significantly from the reference category's mean (i.e., from the intercept).
+the intercept represents the overall effect size for the entire sample.
+The effect of dummy variables represents the difference of that category with the overall effect size.
+If a dummy variable has a significant effect, that means that that group's mean differs significantly from the grand mean (i.e., from the intercept).
 
 ```{r, eval = run_everything}
 library(metacart)
 modres <- lapply(processes, function(p){
   df <- dat[dat$Process == p, ]
   catvars <- sapply(df, class) == "factor" & names(df) %in% mods
-  df[catvars] <- lapply(df[catvars], function(v){
+  df[catvars] <- lapply(names(df)[catvars], function(n){
+    v <- droplevels(df[[n]])
     tab <- table(v)
-    relevel(v, ref = names(tab)[which.max(tab)])
+    if(length(tab) == 1) return(v)
+    v <- relevel(v, ref = names(tab)[which.min(tab)])
+    conts <- try(contr.sum(length(levels(v))))
+    if(inherits(conts, "try-error")) return(v)
+    conts <- conts[nrow(conts):1, , drop = FALSE]
+    colnames(conts) <- paste0("Mvs", levels(v)[apply(conts, 2, function(x){ which(x == 1) })])
+    tryCatch({contrasts(v) <- conts}, error = function(e){
+      browser()
+    })
+    return(v)
   })
+  
   refcat <- data.frame(do.call(rbind,lapply(names(df[catvars]), function(n){c(n, levels(df[[n]])[1])})))
   names(refcat) <- c("Variable", "Reference")
+  mods <- mods[sapply(df[mods], function(x){length(unique(x)) > 1})]
   modmat <- model.matrix(~., df[mods])
   constcols <- colSums(modmat) == 0 | colSums(modmat) == nrow(modmat)
   constcolnames <- colnames(modmat)[constcols]
