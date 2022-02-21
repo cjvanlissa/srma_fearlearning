@@ -247,19 +247,26 @@ Note that, as this is a Bayesian model, inference is based on credible intervals
 A credible interval is interpreted as follows: The population value falls within this interval with 95% probability (certainty).
 This is different from the interpretation of frequentist confidence intervals, which are interpreted as follows: In the long run, 95% of confidence intervals contain the population value.
 
-As the models contained only categorical variables but no meaningful reference category,
-we estimated a model _without_ an intercept,
-and instead included an equal number of dummies to the number of unique categories (ANOVA specification instead of regression specification).
-This way, the effect of each dummy reflects the mean value for that category.
-To further aid interpretability, the dependent variable (effect size) was centered around the random-effects meta-analysis estimated overall effect.
-This changes the interpretation of the effect of each dummy, such that it reflects the deviation of that category from the overall effect size as estimated in the random-effects meta-analysis.
-If a dummy variable has a significant effect, that means that that group's mean differs significantly from the overall mean.
+To examine the effect of a categorical variable,
+a reference category must be chosen.
+Dummy variables encode the difference between each remaining category and this reference category.
+When examining the results,
+the intercept represents the expected effect size for a study that falls within the reference category for all categorical variables.
+The effect of dummy variables represents the difference of that category with the reference category.
+If a dummy variable has a significant effect, that means that that group's mean differs significantly from the reference category's mean (i.e., from the intercept).
 
 ```{r, eval = run_everything}
 library(metacart)
 modres <- lapply(processes, function(p){
   df <- dat[dat$Process == p, ]
-  modmat <- model.matrix(~.-1, df[mods])
+  catvars <- sapply(df, class) == "factor" & names(df) %in% mods
+  df[catvars] <- lapply(df[catvars], function(v){
+    tab <- table(v)
+    relevel(v, ref = names(tab)[which.max(tab)])
+  })
+  refcat <- data.frame(do.call(rbind,lapply(names(df[catvars]), function(n){c(n, levels(df[[n]])[1])})))
+  names(refcat) <- c("Variable", "Reference")
+  modmat <- model.matrix(~., df[mods])
   constcols <- colSums(modmat) == 0 | colSums(modmat) == nrow(modmat)
   constcolnames <- colnames(modmat)[constcols]
   modmat <- modmat[, !constcols]
@@ -272,10 +279,10 @@ modres <- lapply(processes, function(p){
     idnum <- which(duplicated(c(modmatlist, these_dups[i]), fromLast = T))
     colnames(modmat)[idnum] <- paste0(colnames(modmat)[idnum], ";", names(these_dups)[i])
   }
-  yi_centered <- df$yi - mlm[[p]]$mod$b[1,1]
-  res <- rma(yi = yi_centered,
+  yi_notcentered <- df$yi# - mlm[[p]]$mod$b[1,1]
+  res <- rma(yi = yi_notcentered,
              vi = df$vi,
-             mods = modmat, intercept = F)
+             mods = modmat)
   vifs <- vif(res)
   tabres <- data.frame(Parameter = c(rownames(res$b), "Tau2"),
                        cbind(
@@ -286,16 +293,16 @@ modres <- lapply(processes, function(p){
                          p = c(res$pval, res$QEp)))
   tabres$CI <- conf_int(lb = tabres$ci.lb, ub = tabres$ci.ub)
   tabres[c("ci.lb", "ci.ub")] <- NULL
-  tabres$VIF <- c(vifs$vif, NA)
+  tabres$VIF <- c(NA, vifs$vif, NA)
   write.csv(tabres, paste0("rma_mods_", p, ".csv"))
   
   
-  moddat <- data.frame(yi = yi_centered, vi = df$vi, modmat)
+  moddat <- data.frame(yi = yi_notcentered, vi = df$vi, modmat)
   moddat$study <- 1
   standardize <- list(center = rep(0, (ncol(moddat)-3)),
                       scale = rep(1, (ncol(moddat)-3)))
   
-  pma <- brma(yi ~-1+., study = "study", data = moddat, standardize = standardize)
+  pma <- brma(yi ~., study = "study", data = moddat, standardize = standardize)
   
   sumpma <- data.frame(summary(pma)$coefficients)
   sumpma <- cbind(rownames(sumpma), sumpma)
@@ -315,7 +322,8 @@ modres <- lapply(processes, function(p){
   resmc <- suppressWarnings(metacart::FEmrt(reformulate(mods, response = "yi"), data = df, vi = df$vi))
   list(rma = tabres,
        brma = sumpma,
-       mc = resmc)
+       mc = resmc,
+       refcat = refcat)
 })
 names(modres) <- processes
 saveRDS(modres, "modres.RData")
