@@ -8,7 +8,7 @@ knit: worcs::cite_all
 ---
 
 ```{r setup, include=FALSE}
-run_everything = TRUE
+run_everything = FALSE
 library("worcs")
 library(ggplot2)
 library(kableExtra)
@@ -33,12 +33,12 @@ totaln <- dat[!duplicated(dat$article.code), c("number.of.animals.in.control.gro
 totaln <- sapply(processes, function(p){ sum(totaln[totaln$Process == p, -3], na.rm = TRUE)})
 
 dat <- escalc(measure = "SMD",
-         n1i = dat$number.of.animals.in.control.group,
-         n2i = dat$number.of.animals.in.intervention.group,
-         m1i = dat$mean.control.group,
-         m2i = dat$mean.experimental.group,
-         sd1i = dat$sd.control.group,
-         sd2i = dat$sd.experimental.group,
+         n2i = dat$number.of.animals.in.control.group,
+         n1i = dat$number.of.animals.in.intervention.group,
+         m2i = dat$mean.control.group,
+         m1i = dat$mean.experimental.group,
+         sd2i = dat$sd.control.group,
+         sd1i = dat$sd.experimental.group,
          data = dat)
 # dat[c("number.of.animals.in.control.group", "number.of.animals.in.intervention.group", "mean.control.group", "mean.experimental.group", "sd.control.group", "sd.experimental.group")] <- NULL
 
@@ -157,11 +157,17 @@ saveRDS(mlm, "mlm.RData")
 
 tb <- lapply(1:length(processes), function(i){
   tb <- mlm[[i]]$res
+  tb <- rbind(tb, data.frame(Variance = "I2",
+                             estimate.intrcpt = mlm[[i]]$mod$I2,
+                             ci.lb = NA,
+                             ci.ub = NA,
+                             V4 = mlm[[i]]$mod$QEp))
   tb$Process <- processes[i]
   tb
 })
 tb <- do.call(rbind, tb)
-tb$CI <- tidySEM::conf_int(lb = tb$ci.lb, ub = tb$ci.ub)
+tb$CI <- NA
+tb$CI[!is.na(tb$ci.lb)] <- tidySEM::conf_int(lb = tb$ci.lb[!is.na(tb$ci.lb)], ub = tb$ci.ub[!is.na(tb$ci.lb)], digits = 2)
 tb[c("ci.lb", "ci.ub")] <- NULL
 names(tb) <- c("Parameter", "Estimate", "p", "Process", "CI")
 write.csv(tb, "tab_overall.csv", row.names = FALSE)
@@ -284,6 +290,7 @@ modres <- lapply(processes, function(p){
              vi = df$vi,
              mods = modmat)
   vifs <- vif(res)
+  saveRDS(res, paste0("rma_", p, ".RData"))
   tabres <- data.frame(Parameter = c(rownames(res$b), "Tau2"),
                        cbind(
                          Estimate = c(res$b, res$tau2),
@@ -303,7 +310,7 @@ modres <- lapply(processes, function(p){
                       scale = rep(1, (ncol(moddat)-3)))
   
   pma <- brma(yi ~., study = "study", data = moddat, standardize = standardize)
-  
+  saveRDS(pma, paste0("pma_", p, ".RData"))
   sumpma <- data.frame(summary(pma)$coefficients)
   sumpma <- cbind(rownames(sumpma), sumpma)
   names(sumpma)[1:3] <- c("Parameter", "Estimate", "se")
@@ -427,6 +434,63 @@ for (i in 1:length(processes)) {
 
 `r paste(knit(text = out), collapse = '\n')`
 
+
+## Subgroup plots
+
+<!-- predictie intervallen van elke categorie een goede manier is om de data te visualiseren en de data duidelijk over te brengen op de lezer. -->
+```{r, eval = run_everything}
+library(ggridges)
+for(p in processes){
+  res <- readRDS(paste0("pma_", p, ".RData"))
+  pred <- pema:::predict.brma(res, newdata = res$X, type = "samples")
+  for(v in c("ssri", "freq", "disease", "species", "test")){
+    print(paste0(v, "_", p))
+    catdf <- res$X[, startsWith(colnames(res$X), v), drop = F]
+    splt <- apply(catdf, 1, which.max) + 1
+    splt[rowSums(catdf == 0) == ncol(catdf)] <- 1
+    labs <- c(modres[[p]]$refcat$Reference[modres[[p]]$refcat$Variable == v],
+              unique(gsub(".", "", gsub(v, "", grep(paste0("^", v), colnames(res$X), value = T)), fixed = TRUE)))
+    splt <- factor(splt, labels = labs)
+    df_plot <- do.call(rbind, lapply(levels(splt), function(l){
+      data.frame(Value = as.vector(pred[splt == l, ]),
+                 Group = l)
+    }))
+    meds <- tapply(df_plot$Value, df_plot$Group, median)
+    postplot <- ggplot(df_plot, aes(x = Value, y = Group)) +
+      geom_density_ridges(scale = 1, alpha = 0) +
+      geom_segment(data = data.frame(x = meds, xend = meds, y = 1:length(meds), yend = (2:(length(meds)+1))), aes(x = x, xend = xend, y = y, yend = yend), inherit.aes = F, colour = "skyblue3", size = 1) +
+      theme_bw() +
+      scale_y_discrete(expand =c(0,0))+
+      labs(title = p,
+           x = paste0("Posterior predicted effect size"),
+           y = v)
+    ggsave(filename = paste0("group_plot_", v, "_", p, ".png"), plot = postplot, device = "png")
+  }
+}
+```
+
+```{r}
+out = NULL
+vars <- c("ssri", "freq", "disease", "species", "test")
+plotnames <- paste0(
+  "group_plot_", 
+  rep(vars, length(processes)),
+  "_",
+  rep(processes, each = length(vars)),
+  ".png")
+
+for(i in seq(plotnames)){
+  plotname = plotnames[i]
+  out = c(out, knit_expand('plot_template.rmd'))
+}
+
+
+```
+
+`r paste(knit(text = out), collapse = '\n')`
+
+
+
 # Conclusion
 
 Meta-analyses revealed limited evidence that overall effects are non-zero in the population,
@@ -442,3 +506,4 @@ These BRMA analyses revealed no consistent evidence of any significant moderator
 To exclude the possibility that multiple dummies interacted together,
 I conducted additional sensitivity analyses using `metaCART` - a decision-tree based algorithm that inherently accommodates interactions between dummies.
 The `metaCART` analyses also did not find evidence of interaction effects.
+
