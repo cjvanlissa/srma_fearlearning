@@ -260,19 +260,35 @@ When examining the results,
 the intercept represents the expected effect size for a study that falls within the reference category for all categorical variables.
 The effect of dummy variables represents the difference of that category with the reference category.
 If a dummy variable has a significant effect, that means that that group's mean differs significantly from the reference category's mean (i.e., from the intercept).
+The analyses below used the following reference categories:
+
+```{r}
+refcat <- structure(list(Variable = c("ssri", "freq", "disease", "species", "test"
+), Reference = c("FLX", "chronic", "stress", "rat", "CF")), class = "data.frame", row.names = c(NA, -5L))
+
+datatable(
+  refcat,
+  rownames = FALSE,
+  caption = "Reference category for each variable")
+```
+
+
 
 ```{r, eval = run_everything}
 library(metacart)
 modres <- lapply(processes, function(p){
   df <- dat[dat$Process == p, ]
-  catvars <- sapply(df, class) == "factor" & names(df) %in% mods
-  df[catvars] <- lapply(df[catvars], function(v){
-    tab <- table(v)
-    relevel(v, ref = names(tab)[which.max(tab)])
+  df[refcat$Variable] <- lapply(refcat$Variable, function(n){
+    v <- df[[n]]
+    v <- relevel(v, ref = refcat$Reference[refcat$Variable == n])
+    droplevels(v)
   })
-  refcat <- data.frame(do.call(rbind,lapply(names(df[catvars]), function(n){c(n, levels(df[[n]])[1])})))
-  names(refcat) <- c("Variable", "Reference")
-  modmat <- model.matrix(~., df[mods])
+  # refcat <- data.frame(do.call(rbind,lapply(names(df[catvars]), function(n){c(n, levels(df[[n]])[1])})))
+  # names(refcat) <- c("Variable", "Reference")
+  df_mods <- df[mods]
+  constcols <- sapply(df_mods, function(i){length(unique(i))}) == 1
+  df_mods <- df_mods[, !constcols, drop = FALSE]
+  modmat <- model.matrix(~., df_mods)
   constcols <- colSums(modmat) == 0 | colSums(modmat) == nrow(modmat)
   constcolnames <- colnames(modmat)[constcols]
   modmat <- modmat[, !constcols]
@@ -329,8 +345,7 @@ modres <- lapply(processes, function(p){
   resmc <- suppressWarnings(metacart::FEmrt(reformulate(mods, response = "yi"), data = df, vi = df$vi))
   list(rma = tabres,
        brma = sumpma,
-       mc = resmc,
-       refcat = refcat)
+       mc = resmc)
 })
 names(modres) <- processes
 saveRDS(modres, "modres.RData")
@@ -439,16 +454,20 @@ for (i in 1:length(processes)) {
 
 <!-- predictie intervallen van elke categorie een goede manier is om de data te visualiseren en de data duidelijk over te brengen op de lezer. -->
 ```{r, eval = run_everything}
+refcat <- structure(list(Variable = c("ssri", "freq", "disease", "species", "test"
+), Reference = c("FLX", "chronic", "stress", "rat", "CF")), class = "data.frame", row.names = c(NA, 
+-5L))
 library(ggridges)
 for(p in processes){
   res <- readRDS(paste0("pma_", p, ".RData"))
   pred <- pema:::predict.brma(res, newdata = res$X, type = "samples")
-  for(v in c("ssri", "freq", "disease", "species", "test")){
-    print(paste0(v, "_", p))
+  vars <- c("ssri", "freq", "disease", "species", "test")
+  vars <- vars[sapply(vars, function(v){any(grepl(v, colnames(res$X)))})]
+  for(v in vars){
     catdf <- res$X[, startsWith(colnames(res$X), v), drop = F]
     splt <- apply(catdf, 1, which.max) + 1
     splt[rowSums(catdf == 0) == ncol(catdf)] <- 1
-    labs <- c(modres[[p]]$refcat$Reference[modres[[p]]$refcat$Variable == v],
+    labs <- c(refcat$Reference[refcat$Variable == v],
               unique(gsub(".", "", gsub(v, "", grep(paste0("^", v), colnames(res$X), value = T)), fixed = TRUE)))
     splt <- factor(splt, labels = labs)
     df_plot <- do.call(rbind, lapply(levels(splt), function(l){

@@ -44,24 +44,24 @@ frequencySubchronic [3x in 24 h],freq.sub
 "frequencySubchronic [daily, 5x]",freq.sub
 "frequencySubchronic [daily, 6x]",freq.sub
 disease.induction3xTgAD,dis_ind.GMO
-disease.inductionAcute uncontrollable stress,dis_ind.STRESS
-disease.inductionChronic social defeat,dis_ind.STRESS
-disease.inductionChronic unpredictable stress,dis_ind.STRESS
+disease.inductionAcute uncontrollable stress,dis_ind.stress
+disease.inductionChronic social defeat,dis_ind.stress
+disease.inductionChronic unpredictable stress,dis_ind.stress
 disease.inductionHigh fear,dis_ind.none
-disease.inductionImmobilization stressed,dis_ind.STRESS
+disease.inductionImmobilization stressed,dis_ind.stress
 disease.inductionLow fear,dis_ind.none
-disease.inductionMaternal separation,dis_ind.STRESS
+disease.inductionMaternal separation,dis_ind.stress
 disease.inductionMeCP2-308,dis_ind.GMO
 disease.inductionNone,dis_ind.none
-disease.inductionOlfactory bulbectomized,dis_ind.STRESS
+disease.inductionOlfactory bulbectomized,dis_ind.stress
 disease.inductionPdcd2-/-,dis_ind.GMO
-disease.inductionRestraint,dis_ind.STRESS
-disease.inductionSingle prolonged stress,dis_ind.STRESS
-disease.inductionTime-dependent sensitization,dis_ind.STRESS
-disease.inductionTime dependent sensitization,dis_ind.STRESS
-disease.inductionVariable stress,dis_ind.STRESS
+disease.inductionRestraint,dis_ind.stress
+disease.inductionSingle prolonged stress,dis_ind.stress
+disease.inductionTime-dependent sensitization,dis_ind.stress
+disease.inductionTime dependent sensitization,dis_ind.stress
+disease.inductionVariable stress,dis_ind.stress
 disease.inductionVGV 5-HT2CR,dis_ind.GMO
-disease.inductionWIRS,dis_ind.STRESS
+disease.inductionWIRS,dis_ind.stress
 disease.inductionZfpm1CKO,dis_ind.GMO
 speciesCommon goldfish,species.goldfish
 speciesHuman,species.human
