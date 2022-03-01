@@ -43,26 +43,26 @@ frequencySubchronic [3x in 24 h],freq.sub
 "frequencySubchronic [daily, 4x]",freq.sub
 "frequencySubchronic [daily, 5x]",freq.sub
 "frequencySubchronic [daily, 6x]",freq.sub
-disease.induction3xTgAD,disease.GMO
-disease.inductionAcute uncontrollable stress,dis.ind.STRESS
-disease.inductionChronic social defeat,dis.ind.STRESS
-disease.inductionChronic unpredictable stress,dis.ind.STRESS
-disease.inductionHigh fear,dis.ind.highfear
-disease.inductionImmobilization stressed,dis.ind.STRESS
-disease.inductionLow fear,dis.ind.lowfear
-disease.inductionMaternal separation,dis.ind.STRESS
-disease.inductionMeCP2-308,dis.ind.GMO
-disease.inductionNone,dis.ind.none
-disease.inductionOlfactory bulbectomized,dis.ind.OB
-disease.inductionPdcd2-/-,dis.ind.GMO
-disease.inductionRestraint,dis.ind.STRESS
-disease.inductionSingle prolonged stress,dis.ind.STRESS
-disease.inductionTime-dependent sensitization,dis.ind.STRESS
-disease.inductionTime dependent sensitization,dis.ind.STRESS
-disease.inductionVariable stress,dis.ind.STRESS
-disease.inductionVGV 5-HT2CR,dis.ind.GMO
-disease.inductionWIRS,dis.ind.STRESS
-disease.inductionZfpm1CKO,dis.ind.GMO
+disease.induction3xTgAD,dis_ind.GMO
+disease.inductionAcute uncontrollable stress,dis_ind.STRESS
+disease.inductionChronic social defeat,dis_ind.STRESS
+disease.inductionChronic unpredictable stress,dis_ind.STRESS
+disease.inductionHigh fear,dis_ind.none
+disease.inductionImmobilization stressed,dis_ind.STRESS
+disease.inductionLow fear,dis_ind.none
+disease.inductionMaternal separation,dis_ind.STRESS
+disease.inductionMeCP2-308,dis_ind.GMO
+disease.inductionNone,dis_ind.none
+disease.inductionOlfactory bulbectomized,dis_ind.STRESS
+disease.inductionPdcd2-/-,dis_ind.GMO
+disease.inductionRestraint,dis_ind.STRESS
+disease.inductionSingle prolonged stress,dis_ind.STRESS
+disease.inductionTime-dependent sensitization,dis_ind.STRESS
+disease.inductionTime dependent sensitization,dis_ind.STRESS
+disease.inductionVariable stress,dis_ind.STRESS
+disease.inductionVGV 5-HT2CR,dis_ind.GMO
+disease.inductionWIRS,dis_ind.STRESS
+disease.inductionZfpm1CKO,dis_ind.GMO
 speciesCommon goldfish,species.goldfish
 speciesHuman,species.human
 speciesMouse,species.mouse
@@ -70,14 +70,14 @@ speciesRabbit,species.rabbit
 speciesRat,species.rat
 speciesZebrafish,species.zebrafish
 type.of.testActive avoidance,test.AA
-type.of.testAvoidance conditioning,test.AC
-type.of.testCODA,test.CODA
+type.of.testAvoidance conditioning,test.AA
+type.of.testCODA,test.PA
 type.of.testConditioned emotional response,test.CER
 type.of.testConditioned freezing,test.CF
 type.of.testConditioned place aversion,test.CPA
 type.of.testFear potentiated startle,test.FPS
-type.of.testInhibitory avoidance,test.IA
+type.of.testInhibitory avoidance,test.PA
 type.of.testPassive avoidance,test.PA
-type.of.testPlus-maze discriminative avoidance task,test.PMDAT
-type.of.testStep through avoidance,test.STA
-type.of.testTwo-way active avoidance,test.TWAA
+type.of.testPlus-maze discriminative avoidance task,test.PA
+type.of.testStep through avoidance,test.PA
+type.of.testTwo-way active avoidance,test.AA
