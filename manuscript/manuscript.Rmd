@@ -8,7 +8,9 @@ knit: worcs::cite_all
 ---
 
 ```{r setup, include=FALSE}
-run_everything = FALSE
+run_everything = TRUE
+sensitivity = FALSE
+sens_papers <- "{{sens_study}}" #c("Camp 2012 (1)", "Camp 2012 (2)", "Camp 2012 (3)", "Camp 2012 (4)", "Fitzgerald 2015", "Gottschalk 2018", "Ju 2017", "Xiong 2015 (1)", "Xiong 2015 (2)")
 library("worcs")
 library(ggplot2)
 library(kableExtra)
@@ -18,7 +20,6 @@ library(knitr)
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 ```
 
-
 ```{r prepdata, eval=run_everything}
 library(metafor)
 library(pema)
@@ -27,6 +28,9 @@ library(pema)
 # Then, uncomment the line below to load the original or synthetic data
 # (whichever is available), to allow anyone to reproduce your code:
 load_data()
+if(sensitivity){
+  dat <- dat[!dat$article.code %in% sens_papers, ]
+}
 dat$Process <- ordered(dat$Process, levels = unique(dat$Process))
 processes <- levels(dat$Process)
 totaln <- dat[!duplicated(dat$article.code), c("number.of.animals.in.control.group", "number.of.animals.in.intervention.group", "Process")]
@@ -71,6 +75,9 @@ processes <- levels(dat$Process)
 mods <- c("ssri", "freq", "disease", "species", "test")
 ```
 
+```{r, results="asis"}
+print("**This is a sensitivity analysis; the study {{sens_study}} has been removed from the data.")
+```
 
 <!--   Information regarding this data file for the SR fear learning & SSRIs -->
 
@@ -95,9 +102,11 @@ mods <- c("ssri", "freq", "disease", "species", "test")
 
 ```{r threelev, echo=FALSE, warning=FALSE, message=FALSE, results="hide", eval = run_everything}
 mlm <- lapply(processes, function(p){
+  print(p)
   df <- dat[dat$Process == p, ]
+  if(nrow(df) == 0) return(NULL)
   #Conduct meta-analyses
-  #model.mods <- rma.mv(yi, vi, random = list(~ 1 | id_study, ~ 1 | id_es), data=df) 
+  #model.mods <- rma.mv(yi, vi, random = list(~ 1 | id_study, ~ 1 | id_es), data=df)   
   mod <- rma(df$yi, df$vi) 
 confints <- confint(mod)
 
@@ -156,6 +165,7 @@ names(mlm) <- processes
 saveRDS(mlm, "mlm.RData")
 
 tb <- lapply(1:length(processes), function(i){
+  if(is.null(mlm[[i]])) return(NULL)
   tb <- mlm[[i]]$res
   tb <- rbind(tb, data.frame(Variance = "I2",
                              estimate.intrcpt = mlm[[i]]$mod$I2,
@@ -278,6 +288,7 @@ datatable(
 library(metacart)
 modres <- lapply(processes, function(p){
   df <- dat[dat$Process == p, ]
+  if(nrow(df) == 0) return(NULL)
   df[refcat$Variable] <- lapply(refcat$Variable, function(n){
     v <- df[[n]]
     v <- relevel(v, ref = refcat$Reference[refcat$Variable == n])
@@ -405,6 +416,7 @@ for (i in 1:length(processes)) {
 ```{r, results = "asis", eval = FALSE}
 for(i in 1:length(processes)){
   p <- processes[i]
+  if(is.null(modres[[i]])) next
   tb <- modres[[i]]$brma
   tb$format <- as.integer(tb$p == "*")
   print({datatable(tb, rownames= FALSE, caption = paste0("Bayesian regularized meta-regression coefficients for ", p), options = list(
@@ -459,6 +471,7 @@ refcat <- structure(list(Variable = c("ssri", "freq", "disease", "species", "tes
 -5L))
 library(ggridges)
 for(p in processes){
+  if(is.null(modres[[p]])) next
   res <- readRDS(paste0("pma_", p, ".RData"))
   pred <- pema:::predict.brma(res, newdata = res$X, type = "samples")
   vars <- c("ssri", "freq", "disease", "species", "test")
