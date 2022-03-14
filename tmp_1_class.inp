@@ -1,0 +1,23 @@
+TITLE:
+1 classes
+DATA:
+FILE = "data_tmp_766a4a538a9aa5bfd1b231230275dc47.dat";
+ 
+VARIABLE:
+NAMES = x; 
+ MISSING=.;
+ CLASSES = c1(1);
+
+ANALYSIS:
+TYPE = mixture;
+
+MODEL:
+%OVERALL%
+
+
+
+OUTPUT:
+TECH11 TECH14;
+SAVEDATA:
+FILE IS tmp_1.dat;
+SAVE = cprobabilities;

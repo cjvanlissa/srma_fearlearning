@@ -62,7 +62,7 @@ names(dat)[match(mods, names(dat))] <- c("ssri", "freq", "disease", "species", "
 dat <- dat[!is.na(dat$yi), ]
 zscores <- scale(dat[["yi"]])
 maxz <- max(zscores)
-dat <- dat[-which.max(zscores), ]
+dat <- dat[-which.max(abs(zscores)), ]
 # De article code geeft de unieke ID van elk artikel en daarbinnen ook de experimenten aan. Bijvoorbeeld: Bijlsma 2015 heeft twee experimenten uitgevoerd en dus zijn er twee effect sizes meegenomen. Deze heb ik dan bij het proces ‘acq learn to cue’ aangegeven als Bijlsma 2015 (1) en Bijlsma 2015 (2). Nu snap ik ook beter wat jij hiermee bedoelde, sommige artikelen hebben inderdaad meerder effect sizes gerapporteerd maar dat gaat zelfs tot 6 effect sizes bij een aantal artikelen (Leuner 2004 en Ravinder 2013) en niet 4 zoals nu in de tekst staat. 
 dat$id_study <- as.integer(dat$article.code)
 dat$id_es <- 1:nrow(dat)
